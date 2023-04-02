@@ -1,19 +1,31 @@
 <template>
 <div class="constructorStandingsMainBox" id="style-1">
     <h1>Constructors Standings</h1>
+    <!-- <img  src="/teamlogos/red_bull.webp" className="object-cover w-full rounded-t-lg h-60 md:h-auto md:w-48 md:rounded-none md:rounded-l-lg"  alt=""/>  -->
+
     <table>
       <thead>
         <!-- <th>Driver ID</th> -->
-        <th> Name</th>
-        <th>Surname</th>
-        <th>Total Points</th>
+        <th></th>
+        <th> </th>
+        <th></th>
+        <th></th>
         <!-- <th>Team</th> -->
       </thead>
       <tbody>
         <tr v-for="team in constructorStandings" :key="team.constructorId">
           <!-- <td>{{ driver.driverId }}</td> -->
-          <td>{{ team.position }}</td>
-          <td>{{ team.name }}</td>
+          <td>{{ team.position }}
+          </td>
+          <img :src="'/teamlogos/' + team.constructor_id + '.webp'" class="team-logo"/>
+          <td>
+            {{ team.name }}
+          <!-- <img  src="/teamlogos/{{ team.constructor_id }}.webp" className="object-cover w-full rounded-t-lg h-60 md:h-auto md:w-48 md:rounded-none md:rounded-l-lg"  alt=""/>  -->
+
+          <!-- <img  src="/teamlogos/red_bull.webp" className="object-cover w-full rounded-t-lg h-60 md:h-auto md:w-48 md:rounded-none md:rounded-l-lg"  alt=""/>  -->
+
+            <!-- {{ team.constructor_id }} -->
+          </td>
           <td>{{ team.points }}</td>
           <!-- <td>{{ driver.constructor }}</td> -->
         </tr>
@@ -60,9 +72,10 @@
 .constructorStandingsMainBox table {
     text-align: center;
     
+    
 }
 .constructorStandingsMainBox table th, td {
-    padding-left: 15px;
+    padding-left: 25px;
 }
 
 
@@ -86,6 +99,14 @@
 	border-radius: 10px;
 	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
 	background-color:rgba(74, 80, 80, 0.411);
+}
+
+
+.team-logo {
+  width: 50px; /* Adjust the width as desired */
+  height: auto;
+  object-fit: cover;
+  border-radius: 4px; /* Add a border radius if you want rounded corners */
 }
 </style>
 

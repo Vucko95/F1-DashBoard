@@ -1,21 +1,32 @@
 <template>
 <div class="driversStandingsMainBox" id="style-1">
     <h1>Driver Standings</h1>
-    <table>
+    <div v-if="loading">
+      <div class="lds-dual-ring"></div>
+    </div>
+    <table  v-if="!loading">
       <thead>
         <!-- <th>Driver ID</th> -->
-        <th> Name</th>
-        <th>Surname</th>
-        <th>Total Points</th>
-        <th>Team</th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
       </thead>
       <tbody>
         <tr v-for="driver in driverStandings" :key="driver.driverId">
           <!-- <td>{{ driver.driverId }}</td> -->
           <td>{{ driver.givenName }}</td>
           <td>{{ driver.familyName }}</td>
-          <td>{{ driver.points }}</td>
-          <td>{{ driver.constructor }}</td>
+          <td>
+
+          </td>
+          <img :src="'/teamlogos/' + driver.constructor_id + '.webp'" class="team-logo"/>
+          <td>
+            {{ driver.constructor }}</td>
+            
+            <!-- <td>{{ driver.constructor_id }}</td> -->
+            <td>{{ driver.points }}</td>
         </tr>
       </tbody>
     </table>
@@ -32,7 +43,7 @@
     transition: all 0.3s ease;
     border-radius: 10px;
     background: rgba(7, 1, 1, 0.589);
-    padding: 20px;
+    padding: 10px;
     max-height: 50%;
     overflow: auto;
     width: 35%;
@@ -62,7 +73,7 @@
     
 }
 .driversStandingsMainBox table th, td {
-    padding-left: 15px;
+    padding-left: 35px;
 }
 
 
@@ -96,8 +107,7 @@ export default {
   name: 'ListDriverStandings',
   methods: {
   fetchDriverstandings(year) {
-    // console.log(year)
-    // console.log(year)
+
     fetch('http://localhost:8888/year/driverstandings', {
       method: 'POST',
       headers: {
@@ -108,13 +118,17 @@ export default {
       .then(response => response.json())
       .then(data => {
         this.driverStandings = data;
-        console.log(data)
+        this.loading = false;
+
+        // console.log(data)
       })
       .catch(error => console.error(error));
   }
 },
   data() {
     return {
+      loading: true,
+
       driverStandings: []
     };
   },
@@ -131,10 +145,21 @@ created() {
 
     
 
-    EventBus.$on('yearSelectedDriverStandings', data => {
+    EventBus.$on('fetchDriverStandings', data => {
       this.driverStandings = data;
     });
+
+
+    EventBus.$on('fetchDriverStandignsStarted', () => {
+      this.loading = true;
+    });
+
+    EventBus.$on('fetchDriverStandignsFinished', () => {
+      this.loading = false;
+    });
   }
+
+  
 
   
 };

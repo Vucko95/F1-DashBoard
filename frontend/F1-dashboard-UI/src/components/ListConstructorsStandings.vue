@@ -2,8 +2,10 @@
 <div class="constructorStandingsMainBox" id="style-1">
     <h1>Constructors Standings</h1>
     <!-- <img  src="/teamlogos/red_bull.webp" className="object-cover w-full rounded-t-lg h-60 md:h-auto md:w-48 md:rounded-none md:rounded-l-lg"  alt=""/>  -->
-
-    <table>
+    <div v-if="loading">
+      <div class="lds-dual-ring"></div>
+    </div>
+    <table v-if="!loading">
       <thead>
         <!-- <th>Driver ID</th> -->
         <th></th>
@@ -20,10 +22,7 @@
           <img :src="'/teamlogos/' + team.constructor_id + '.webp'" class="team-logo"/>
           <td>
             {{ team.name }}
-          <!-- <img  src="/teamlogos/{{ team.constructor_id }}.webp" className="object-cover w-full rounded-t-lg h-60 md:h-auto md:w-48 md:rounded-none md:rounded-l-lg"  alt=""/>  -->
-
-          <!-- <img  src="/teamlogos/red_bull.webp" className="object-cover w-full rounded-t-lg h-60 md:h-auto md:w-48 md:rounded-none md:rounded-l-lg"  alt=""/>  -->
-
+  
             <!-- {{ team.constructor_id }} -->
           </td>
           <td>{{ team.points }}</td>
@@ -44,7 +43,7 @@
     transition: all 0.3s ease;
     border-radius: 10px;
     background: rgba(7, 1, 1, 0.589);
-    padding: 20px;
+    padding: 10px;
     max-height: 50%;
     overflow: auto;
     width: 35%;
@@ -103,10 +102,11 @@
 
 
 .team-logo {
-  width: 50px; /* Adjust the width as desired */
+  width: 50px; 
   height: auto;
   object-fit: cover;
-  border-radius: 4px; /* Add a border radius if you want rounded corners */
+  vertical-align: middle;
+  /* border-radius: 4px;  */
 }
 </style>
 
@@ -117,8 +117,7 @@ export default {
   name: 'ListConstructorsStandings',
   methods: {
   fetchConstructorstandings(year) {
-    console.log(year)
-    console.log(year)
+
     fetch('http://localhost:8888/year/constructorstandings', {
       method: 'POST',
       headers: {
@@ -129,13 +128,17 @@ export default {
       .then(response => response.json())
       .then(data => {
         this.constructorStandings = data;
-        console.log(data)
+        this.loading = false;
+
+        // console.log(data)
       })
       .catch(error => console.error(error));
   }
 },
   data() {
     return {
+      loading: true,
+
       constructorStandings: []
     };
   },
@@ -152,8 +155,16 @@ created() {
 
     
 
-    EventBus.$on('yearSelectedConstructorsStandings', data => {
+    EventBus.$on('fetchConstructorsStandings', data => {
       this.constructorStandings = data;
+    });
+    
+    EventBus.$on('fetchConstructorStandignsStarted', () => {
+      this.loading = true;
+    });
+
+    EventBus.$on('fetchConstructorStandignsFinished', () => {
+      this.loading = false;
     });
   }
 

@@ -1,5 +1,5 @@
 <template>
-<div class="constructorStandingsMainBox" id="style-1">
+<div  v-if="show" class="constructorStandingsMainBox" id="style-1">
     <h1>Constructors Standings</h1>
     <!-- <img  src="/teamlogos/red_bull.webp" className="object-cover w-full rounded-t-lg h-60 md:h-auto md:w-48 md:rounded-none md:rounded-l-lg"  alt=""/>  -->
     <div v-if="loading">
@@ -138,6 +138,7 @@ export default {
   data() {
     return {
       loading: true,
+      show: false,
 
       constructorStandings: []
     };
@@ -151,6 +152,10 @@ export default {
 //       .catch(error => console.error(error));
 //   }
 created() {
+  EventBus.$on("toggle-select-year", () => {
+        this.show = !this.show;
+        EventBus.$emit("select-year-toggled", this.show);
+      });
     this.fetchConstructorstandings(2023);
 
     

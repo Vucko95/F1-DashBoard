@@ -1,5 +1,5 @@
 <template>
-    <div class="displayYearBox" id="style-1">
+    <div v-if="show" class="displayYearBox" id="style-1">
         <!-- <h1 > Year</h1> -->
         <select class="custom-select" name="year" id="year" @change="handleYearChange">
             <option value="2023">2023</option>
@@ -56,6 +56,21 @@
 import { EventBus } from '@/eventBus.js';
     export default {
       name: 'SelectYear',
+
+      created() {
+      EventBus.$on("toggle-select-year", () => {
+        this.show = !this.show;
+        EventBus.$emit("select-year-toggled", this.show);
+      });
+    },
+    data() {
+    return {
+      show: false,
+    };
+  },
+
+
+
       methods: {
 
 

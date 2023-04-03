@@ -1,5 +1,5 @@
 <template>
-<div class="driversStandingsMainBox" id="style-1">
+<div v-if="show" class="driversStandingsMainBox" id="style-1">
     <h1>Driver Standings</h1>
     <div v-if="loading">
       <div class="lds-dual-ring"></div>
@@ -128,6 +128,8 @@ export default {
   data() {
     return {
       loading: true,
+      show: false,
+
 
       driverStandings: []
     };
@@ -141,6 +143,12 @@ export default {
 //       .catch(error => console.error(error));
 //   }
 created() {
+  EventBus.$on("toggle-select-year", () => {
+        this.show = !this.show;
+        EventBus.$emit("select-year-toggled", this.show);
+      });
+
+
     this.fetchDriverstandings(2023);
 
     

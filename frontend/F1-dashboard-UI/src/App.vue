@@ -4,8 +4,8 @@ import LeftSidebar from '@/components/LeftSidebar.vue'
 import ListDriverStandings from '@/components/driver/ListDriverStandings.vue'
 import ListConstructorsStandings from '@/components/driver/ListConstructorsStandings.vue'
 import SelectYear from '@/components/driver/SelectYear.vue'
-import ListDrivers from '@/components/circuits/ListDrivers.vue'
-import ListTracksByYear from '@/components/circuits/ListTracksByYear.vue'
+import ListDriversByYear from '@/components/circuits/ListDriversByYear.vue'
+import DriverPositionsPerCircuit from '@/components/circuits/DriverPositionsPerCircuit.vue'
 
 </script>
 
@@ -14,10 +14,10 @@ import ListTracksByYear from '@/components/circuits/ListTracksByYear.vue'
     <LeftSidebar />
     <SelectYear />
     <div class="main-content">
-      <ListDrivers />
+      <ListDriversByYear />
       <ListDriverStandings />
       <ListConstructorsStandings />
-      <ListTracksByYear />
+      <DriverPositionsPerCircuit />
 
       <RouterView />
     </div>

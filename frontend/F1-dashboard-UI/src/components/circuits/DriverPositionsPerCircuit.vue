@@ -1,5 +1,5 @@
 <template>
-    <div  class="displayCircuitsByYear" id="style-1">
+    <div  v-if="show" class="displayCircuitsByYear" id="style-1">
 
         <table>
             <thead>
@@ -75,13 +75,12 @@ import { EventBus } from '@/eventBus.js';
       name: 'SelectYear',
 
       created() {
-            console.log(countryCodes.Bahrain)
-        // EventBus.$on('sendDriverId', (driverID, selectedYear) => {
-        EventBus.$on('sendDriverId', ({ driverID, selectedYear }) => {
+        EventBus.$on("toggle-Circuit-Components", () => {
+        this.show = !this.show;
+        // EventBus.$emit("select-year-toggled", this.show);
+      });
 
-        // console.log('Data Received');
-        console.log(driverID);
-        console.log(selectedYear);
+        EventBus.$on('sendDriverId', ({ driverID, selectedYear }) => {
         this.getDriverCircuitResultsByYear(driverID, selectedYear);
 });
 

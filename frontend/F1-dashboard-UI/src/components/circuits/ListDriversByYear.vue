@@ -1,5 +1,5 @@
 <template>
-<div class="driversMainBox" id="style-1">
+<div v-if="show" class="driversMainBox" id="style-1">
     <!-- <h1>Drivers</h1> -->
 
     <select class="custom-select" name="year" id="year" @change="handleYearChange">
@@ -11,7 +11,10 @@
             <option value="2018">2018</option>
     
         </select>
-    <table>
+        <div v-if="loading">
+      <div class="lds-dual-ring"></div>
+    </div>
+    <table v-if="!loading" class="table-container">
       <thead>
         <!-- <th>Driver ID</th> -->
         <th> </th>
@@ -46,9 +49,11 @@
     border-radius: 10px;
     background: rgba(7, 1, 1, 0.589);
     padding: 20px 20px 0px 20px;
-    /* min-width: 40%; */
-    max-height: 50%;
-    overflow: auto;
+    min-width: 25%;
+    /* min-height: 50%; */
+    /* max-height: 10%; */
+    height: 800px;
+    overflow-y: auto;
    
     display: flex;
     flex-direction: column;
@@ -85,7 +90,11 @@
     padding-left: 15px;
 }
 
-
+.table-container {
+    max-height: 300px; 
+    overflow-y: auto;
+    width: 100%;
+}
 
 .dirver-icon {
   width: 60px;
@@ -111,9 +120,28 @@
 
 <script>
 import { EventBus } from '@/eventBus.js';
-
+// toggle-Circuit-Components
 export default {
   name: 'ListDrivers',
+  created() {
+    EventBus.$on("toggle-Circuit-Components", () => {
+        this.show = !this.show;
+        // EventBus.$emit("select-year-toggled", this.show);
+      });
+  this.fetchDrivers(2023);
+  // EventBus.$on('fetchConstructorStandignsStarted', () => {
+  //     this.loading = true;
+  //   });
+
+  //   EventBus.$on('fetchConstructorStandignsFinished', () => {
+  //     this.loading = false;
+  //   });
+  
+
+  EventBus.$on('yearSelected', data => {
+    this.drivers = data;
+  });
+},
   methods: {
     handleYearChange(event) {
   this.selectedYear = event.target.value;
@@ -125,6 +153,7 @@ export default {
 
 
   fetchDrivers(selectedYear) {
+    this.loading = true;
     fetch('http://localhost:8888/year', {
       method: 'POST',
       headers: {
@@ -135,6 +164,7 @@ export default {
       .then(response => response.json())
       .then(data => {
         this.drivers = data;
+        this.loading = false;
         // console.log(data)
       })
       .catch(error => console.error(error));
@@ -153,7 +183,9 @@ export default {
   data() {
     return {
       drivers: [],
-      selectedYear: '2023'
+      selectedYear: '2023',
+      show: false,
+      loading: true,
     };
   },
 //   created() {
@@ -164,16 +196,7 @@ export default {
 //       })
 //       .catch(error => console.error(error));
 //   }
-created() {
-  
-    this.fetchDrivers(2023);
 
-    
-
-    EventBus.$on('yearSelected', data => {
-      this.drivers = data;
-    });
-  }
 
   
 };

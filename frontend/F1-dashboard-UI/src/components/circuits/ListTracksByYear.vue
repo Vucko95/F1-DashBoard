@@ -1,40 +1,27 @@
 <template>
-    <!-- <div v-if="show" class="displayYearBox" id="style-1"> -->
     <div  class="displayCircuitsByYear" id="style-1">
-        <!-- <h1 > Year</h1> -->
-        <!-- <select class="custom-select" name="year" id="year" @change="handleYearChange">
-            <option value="2023">2023</option>
-            <option value="2022">2022</option>
-            <option value="2021">2021</option>
-            <option value="2020">2020</option>
-            <option value="2019">2019</option>
-            <option value="2018">2018</option>
-    
-        </select> -->
-        <!-- <ul v-for="circuit in circuitsList" :key="circuit.circuitId">
-            <li> 
-                {{ circuit.circuitName }}
-                {{ circuit.country }}
-            </li>
-        </ul> -->
+
         <table>
             <thead>
                 <tr>
-                <th>Circuit ID</th>
+                <!-- <th>Circuit ID</th> -->
+                <!-- <th>Country</th> -->
+                <th>CN</th>
                 <th>Circuit Name</th>
-                <th>Country</th>
+                <th>Position</th>
                 </tr>
             </thead>
             <tbody>
                 <tr v-for="circuit in circuitsList" :key="circuit.circuitId">
-                <td>{{ circuit.circuitId }}</td>
-                <td>{{ circuit.raceName }}</td>
-                <td>{{ circuit.country }}</td>
-                <td>{{ circuit.position }}</td>
-                <td>    <img :src="'https://flagsapi.com/' + circuit.countryCode + '/flat/64.png'">
+                    <td>    <img :src="'https://flagsapi.com/' + circuit.countryCode + '/flat/48.png'">
+                    </td>
+                    <td>{{ circuit.raceName }}</td>
+                <!-- <td>{{ circuit.circuitId }}</td> -->
+                <!-- <td>{{ circuit.country }}</td> -->
+                <td class="position">{{ circuit.position }}</td>
 
-</td>
-                <td>{{ circuit.countryCode }}</td>
+
+                <!-- <td>{{ circuit.countryCode }}</td> -->
                 </tr>
             </tbody>
         </table>
@@ -44,15 +31,14 @@
     <style>
         .displayCircuitsByYear {
             margin: 5%;
-         
-    /* margin-top: 12.5%; */
+        
             box-shadow: 0 0 3px rgba(78, 248, 234, 0.808);
             border: 1px solid rgba(0, 0, 0, 0.514);
             transition: all 0.3s ease;
             border-radius: 10px;
             background: rgba(7, 1, 1, 0.589);
-            padding: 20px;
-            width: 30%;
+            padding: 40px;
+            /* width: 30%; */
             /* max-height: 30%; */
             max-height: 700px;
             overflow: auto;
@@ -75,7 +61,9 @@
             padding: 5px;
             font-size: 20px;
         }
-
+        .position {
+            font-weight: 700;
+        }
   
     </style>
     
@@ -96,10 +84,7 @@ import { EventBus } from '@/eventBus.js';
         console.log(selectedYear);
         this.getDriverCircuitResultsByYear(driverID, selectedYear);
 });
-    //   EventBus.$on("toggle-select-year", () => {
-    //     this.show = !this.show;
-    //     EventBus.$emit("select-year-toggled", this.show);
-    //   });
+
     },
     data() {
     return {

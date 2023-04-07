@@ -1,11 +1,11 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
 import LeftSidebar from '@/components/LeftSidebar.vue'
-import ListDrivers from '@/components/ListDrivers.vue'
-import ListDriverStandings from '@/components/ListDriverStandings.vue'
-import ListConstructorsStandings from '@/components/ListConstructorsStandings.vue'
-import SelectYear from '@/components/SelectYear.vue'
-import ListTracksByYear from '@/components/ListTracksByYear.vue'
+import ListDriverStandings from '@/components/driver/ListDriverStandings.vue'
+import ListConstructorsStandings from '@/components/driver/ListConstructorsStandings.vue'
+import SelectYear from '@/components/driver/SelectYear.vue'
+import ListDrivers from '@/components/circuits/ListDrivers.vue'
+import ListTracksByYear from '@/components/circuits/ListTracksByYear.vue'
 
 </script>
 

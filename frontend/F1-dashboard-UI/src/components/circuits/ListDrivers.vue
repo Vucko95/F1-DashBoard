@@ -1,7 +1,6 @@
 <template>
 <div class="driversMainBox" id="style-1">
-    <h1>Drivers</h1>
-    <img src="https://flagsapi.com/AR/flat/64.png">
+    <!-- <h1>Drivers</h1> -->
 
     <select class="custom-select" name="year" id="year" @change="handleYearChange">
             <option value="2023">2023</option>
@@ -15,18 +14,21 @@
     <table>
       <thead>
         <!-- <th>Driver ID</th> -->
-        <th> Name</th>
-        <th>Surname</th>
-        <th>Car Number</th>
+        <th> </th>
+        <th> </th>
+        <th></th>
+        <!-- <th>Car Number</th> -->
       </thead>
       <tbody>
         <tr v-for="driver in drivers" :key="driver.driverId">
           <!-- <td>{{ driver.driverId }}</td> -->
+          <td>          <img :src="'/drivers/' + driver.driverId + '.avif'" class="dirver-icon"/>
+</td>
           <td>{{ driver.givenName }}</td>
           
           <td>{{ driver.familyName }}</td>
-          <td>{{ driver.permanentNumber }}</td>
-          <td><button v-on:click="printDriverId(driver.driverId, selectedYear)" >CLICK MEEE</button></td>
+          <!-- <td>{{ driver.permanentNumber }}</td> -->
+          <td><button class="driver-button" v-on:click="printDriverId(driver.driverId, selectedYear)" >INFO</button></td>
         </tr>
       </tbody>
     </table>
@@ -37,24 +39,25 @@
 <style>
 .driversMainBox {
     margin: 5%;
-    margin-top: 12.5%;
+    /* margin-top: 12.5%; */
     box-shadow: 0 0 3px rgba(78, 248, 234, 0.808);
     border: 1px solid rgba(0, 0, 0, 0.514);
     transition: all 0.3s ease;
     border-radius: 10px;
     background: rgba(7, 1, 1, 0.589);
-    padding: 20px;
-    /* max-width: 30%; */
+    padding: 20px 20px 0px 20px;
+    /* min-width: 40%; */
     max-height: 50%;
     overflow: auto;
    
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: center;    
+}
 
-
-
-    
+.driversMainBox h1 {
+  padding: 0;
+  margin: 0;
 }
 .driversMainBox:hover {
     box-shadow: 0 0 5px rgba(255, 0, 0, 0.562);
@@ -68,7 +71,12 @@
     font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif
     /* color: white; */
 }
-
+.driversMainBox select {
+  margin-bottom: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  width: 100%;
+}
 .driversMainBox table {
     text-align: center;
     
@@ -78,26 +86,26 @@
 }
 
 
-#style-1::-webkit-scrollbar-track
-{
-	-webkit-box-shadow: inset 0 0 6px rgb(0, 0, 0);
-	border-radius: 15px;
-	background-color: #000000;
+
+.dirver-icon {
+  width: 60px;
+  border-radius: 30%;
+  background: rgba(255, 255, 255, 0.26) ;
+  /* padding-left: 10px; */
 }
 
-#style-1::-webkit-scrollbar
-{
-    border-radius: 15px;
+.driver-button {
+  border: 2px solid white;
+  color: white;
+  background-color: black;
+  padding: 5px 10px 5px 10px;
+  border-radius: 10%;
+  transition: transform 0.5s ease;
 
-	width: 12px;
-	background-color: #030202;
+
 }
-
-#style-1::-webkit-scrollbar-thumb
-{
-	border-radius: 10px;
-	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
-	background-color:rgba(74, 80, 80, 0.411);
+.driver-button:hover {
+  transform: scale(1.3);
 }
 </style>
 

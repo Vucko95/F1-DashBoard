@@ -58,7 +58,7 @@ import { EventBus } from '@/eventBus.js';
       name: 'SelectYear',
 
       created() {
-      EventBus.$on("toggle-select-year", () => {
+      EventBus.$on("toggle-Standings-Components", () => {
         this.show = !this.show;
         EventBus.$emit("select-year-toggled", this.show);
       });

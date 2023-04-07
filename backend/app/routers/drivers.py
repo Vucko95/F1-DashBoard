@@ -34,6 +34,7 @@ def get_base_player_info(data: dict):
     drivers = []
     for driver in list_of_drivers:
         drivers.append({'driverId' : driver['driverId'],'givenName' : driver['givenName'],'familyName' : driver['familyName'],'permanentNumber' : driver['permanentNumber'], })
+        # drivers.append({'driverId' : driver['driverId']})
     # print(drivers)
     return drivers
 

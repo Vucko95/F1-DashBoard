@@ -1,6 +1,7 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
 import LeftSidebar from '@/components/LeftSidebar.vue'
+import articles from '@/components/articles.vue'
 import ListDriverStandings from '@/components/driver/ListDriverStandings.vue'
 import ListConstructorsStandings from '@/components/driver/ListConstructorsStandings.vue'
 import SelectYear from '@/components/driver/SelectYear.vue'
@@ -14,6 +15,8 @@ import DriverPositionsPerCircuit from '@/components/circuits/DriverPositionsPerC
     <LeftSidebar />
     <SelectYear />
     <div class="main-content">
+      <articles />
+      
       <ListDriversByYear />
       <ListDriverStandings />
       <ListConstructorsStandings />

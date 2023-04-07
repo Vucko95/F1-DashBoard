@@ -1,0 +1,145 @@
+<template>
+
+
+    
+    <img  class="img_specific" src="/f1.gif" alt="logo"  />
+    <div class="allArticles">
+        <h1 class="h1_specific">Latest News</h1>
+
+        <div class="singleArticle"
+        v-for="article in articles" :key="article.articleTitle"
+        >
+        <!-- <ul> -->
+            <!-- <li > -->
+                <h2>{{ article.articleTitle }}</h2>
+                <p v-html="article.articleSummary"></p>
+                <button>
+                    <a :href="article.articleLink" target="_blank">Read More</a>
+                </button>
+                <!-- </li> -->
+                <!-- </ul> -->
+        </div>
+        </div>
+
+
+</template>
+
+<script>
+
+
+export default {
+      name: 'articles',
+
+      created() {
+            this.getNews()
+    //   EventBus.$on("toggle-Standings-Components", () => {
+    //     this.show = !this.show;
+    //     EventBus.$emit("select-year-toggled", this.show);
+    //   });
+    },
+//     data() {
+//     return {
+//       show: false,
+//     };
+//   },
+
+
+
+      methods: {
+
+
+        getNews() {
+            fetch('http://localhost:8888/news', {
+                method: 'GET',
+                headers: {
+                'Content-Type': 'application/json'
+                },
+            })
+                .then(response => response.json())
+                .then(data => {
+                    this.articles = data
+                })
+                .catch(error => console.error(error));
+                }
+                 },
+
+      data() {
+            return {
+                articles: [],
+            };
+  },
+
+    };
+</script>
+
+<style>
+.img_specific {
+    position: absolute;
+    left: 20%;
+    width: 420px;
+    
+}
+.h1_specific {
+    position: absolute;
+    left: 44.5%;
+    color: white;
+    font-weight: 800;
+    font-size: 36px;
+}
+.allArticles {
+
+    margin:5%;
+    overflow: auto;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    text-align: center;
+    box-shadow: 0 0 3px rgba(78, 248, 234, 0.808);
+    border: 1px solid rgba(0, 0, 0, 0.514);
+    transition: all 0.3s ease;
+    border-radius: 10px;
+    background: rgba(7, 1, 1, 0.589);
+    padding: 20px;
+    padding-top: 60px;
+}
+
+.singleArticle {
+            box-shadow: 0 0 3px rgba(78, 248, 234, 0.808);
+            border: 1px solid rgba(0, 0, 0, 0.514);
+            transition: all 0.3s ease;
+            border-radius: 10px;
+            background: rgba(7, 1, 1, 0.589);    
+    
+}
+
+
+h2 {
+    color: aliceblue;
+}
+
+a {
+    text-decoration: none;
+    color: whitesmoke;
+    font-size: 20px;
+}
+p {
+    color: gray;
+    font-size: 22px;
+    padding: 5px;
+}
+button {
+    margin: 10px;
+  border: 2px solid white;
+  color: white;
+  text-decoration: none;
+  background-color: black;
+  padding: 5px 10px 5px 10px;
+  border-radius: 10px;
+  transition: transform 0.5s ease;
+
+
+}
+button:hover {
+  transform: scale(1.2);
+}
+</style>

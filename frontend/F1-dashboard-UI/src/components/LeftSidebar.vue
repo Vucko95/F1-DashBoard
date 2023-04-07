@@ -13,7 +13,7 @@
     </div>
   </template>
   
-  <script>
+<script>
 import { EventBus } from "@/eventBus.js";
 
 
@@ -69,3 +69,12 @@ import { EventBus } from "@/eventBus.js";
   </style>
 
 <!--   -->
+
+
+<!-- TODO  -->
+<!-- DISPLAY RESULTS BY YEAR FIRST 3  -->
+<!-- https://ergast.com/api/f1/2022/results/1 -->
+<!-- https://ergast.com/api/f1/2022/results/2 -->
+<!-- https://ergast.com/api/f1/2022/results/3 -->
+<!-- https://ergast.com/api/f1/2022/circuits.json -->
+<!-- http://ergast.com/api/f1/2021/drivers/hamilton/results.json -->

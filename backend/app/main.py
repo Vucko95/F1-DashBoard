@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from routers import drivers
+from routers import drivers, circuits
 from fastapi.middleware.cors import CORSMiddleware
 
 
@@ -13,6 +13,7 @@ app.add_middleware(
 )
 
 app.include_router(drivers.router)
+app.include_router(circuits.router)
 
 
 

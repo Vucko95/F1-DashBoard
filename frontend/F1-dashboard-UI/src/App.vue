@@ -5,6 +5,7 @@ import ListDrivers from '@/components/ListDrivers.vue'
 import ListDriverStandings from '@/components/ListDriverStandings.vue'
 import ListConstructorsStandings from '@/components/ListConstructorsStandings.vue'
 import SelectYear from '@/components/SelectYear.vue'
+import ListTracksByYear from '@/components/ListTracksByYear.vue'
 
 </script>
 
@@ -13,9 +14,11 @@ import SelectYear from '@/components/SelectYear.vue'
     <LeftSidebar />
     <SelectYear />
     <div class="main-content">
-      <!-- <ListDrivers /> -->
+      <ListDrivers />
       <ListDriverStandings />
       <ListConstructorsStandings />
+      <ListTracksByYear />
+
       <RouterView />
     </div>
   </div>

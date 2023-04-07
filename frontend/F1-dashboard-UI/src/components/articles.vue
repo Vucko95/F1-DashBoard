@@ -13,6 +13,7 @@
             <!-- <li > -->
                 <h2>{{ article.articleTitle }}</h2>
                 <p v-html="article.articleSummary"></p>
+                <p class="published" v-html="article.articlepublished"></p>
                 <button>
                     <a :href="article.articleLink" target="_blank">Read More</a>
                 </button>
@@ -87,7 +88,6 @@ export default {
     font-size: 36px;
 }
 .allArticles {
-
     margin:5%;
     overflow: auto;
     display: grid;
@@ -110,6 +110,10 @@ export default {
             border-radius: 10px;
             background: rgba(7, 1, 1, 0.589);    
     
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    
 }
 
 
@@ -124,22 +128,30 @@ a {
 }
 p {
     color: gray;
-    font-size: 22px;
-    padding: 5px;
+    font-size: 18px;
+    /* padding: 5px; */
 }
 button {
     margin: 10px;
-  border: 2px solid white;
+  border: 1px solid black;
   color: white;
   text-decoration: none;
   background-color: black;
   padding: 5px 10px 5px 10px;
   border-radius: 10px;
   transition: transform 0.5s ease;
+  box-shadow: 0 0 3px rgba(78, 248, 234, 0.808);
 
 
 }
-button:hover {
+/* button:hover {
   transform: scale(1.2);
+} */
+
+.published {
+    color: white;
+    font-size: 15px;
+    text-align: right;
+    margin-right: 10px;
 }
 </style>

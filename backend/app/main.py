@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from routers import drivers, circuits, news
+from routers import drivers, circuits, news, races
 from fastapi.middleware.cors import CORSMiddleware
 import feedparser, json
 
@@ -15,6 +15,7 @@ app.add_middleware(
 app.include_router(drivers.router)
 app.include_router(circuits.router)
 app.include_router(news.router)
+app.include_router(races.router)
 
 
 # url = "https://feeds.bbci.co.uk/sport/formula1/rss.xml"

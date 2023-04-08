@@ -31,7 +31,7 @@
           
           <td>{{ driver.familyName }}</td>
           <!-- <td>{{ driver.permanentNumber }}</td> -->
-          <td><button class="driver-button" v-on:click="printDriverId(driver.driverId, selectedYear)" >INFO</button></td>
+          <td><button class="driver-button" v-on:click="sendDriverIdPlusYear(driver.driverId, selectedYear)" >INFO</button></td>
         </tr>
       </tbody>
     </table>
@@ -169,7 +169,7 @@ export default {
       })
       .catch(error => console.error(error));
   },
-  printDriverId(driverID,selectedYear) {
+  sendDriverIdPlusYear(driverID,selectedYear) {
     // console.log('SENDING >>>')
     // console.log(selectedYear)
 

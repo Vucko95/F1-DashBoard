@@ -2,8 +2,8 @@
 
 
     
-    <img  class="img_specific" src="/f1.gif" alt="logo"  />
-    <div class="allArticles">
+    <img v-if="show && loading" class="img_specific" src="/f1.gif" alt="logo"  />
+    <div v-if="show && loading" class="allArticles">
         <h1 class="h1_specific">Latest News</h1>
 
         <div class="singleArticle"
@@ -26,23 +26,35 @@
 </template>
 
 <script>
+import { EventBus } from "@/eventBus.js";
 
 
 export default {
       name: 'articles',
 
       created() {
+
+        EventBus.$on("toggle-Articles", () => {
+            // EventBus.$emit("select-year-toggled", this.show);
+            this.show = !this.show;
             this.getNews()
+      });
+            // this.show = false;
+
+            // this.show = true;
+            // console.log(this.show)
     //   EventBus.$on("toggle-Standings-Components", () => {
     //     this.show = !this.show;
     //     EventBus.$emit("select-year-toggled", this.show);
     //   });
     },
-//     data() {
-//     return {
-//       show: false,
-//     };
-//   },
+    data() {
+    return {
+      show: false,
+      articles: [],
+      loading : false,
+    };
+  },
 
 
 
@@ -50,6 +62,7 @@ export default {
 
 
         getNews() {
+            // this.show = false
             fetch('http://localhost:8888/news', {
                 method: 'GET',
                 headers: {
@@ -59,16 +72,18 @@ export default {
                 .then(response => response.json())
                 .then(data => {
                     this.articles = data
+                    // this.show = true;
+                    this.loading = true;
                 })
                 .catch(error => console.error(error));
                 }
                  },
 
-      data() {
-            return {
-                articles: [],
-            };
-  },
+//       data() {
+//             return {
+//                 articles: [],
+//             };
+//   },
 
     };
 </script>

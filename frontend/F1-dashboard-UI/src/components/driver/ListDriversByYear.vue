@@ -120,11 +120,11 @@
 
 <script>
 import { EventBus } from '@/eventBus.js';
-// toggle-Circuit-Components
+// toggle-Drivers-Components
 export default {
   name: 'ListDrivers',
   created() {
-    EventBus.$on("toggle-Circuit-Components", () => {
+    EventBus.$on("toggle-Drivers-Components", () => {
         this.show = !this.show;
         // EventBus.$emit("select-year-toggled", this.show);
       });

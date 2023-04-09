@@ -68,14 +68,14 @@
     </style>
     
     <script>
-    import countryCodes from './countryCodes.js';
+    import countryCodes from '../countryCodes.js';
 
 import { EventBus } from '@/eventBus.js';
     export default {
       name: 'SelectYear',
 
       created() {
-        EventBus.$on("toggle-Circuit-Components", () => {
+        EventBus.$on("toggle-Drivers-Components", () => {
         this.show = !this.show;
         // EventBus.$emit("select-year-toggled", this.show);
       });

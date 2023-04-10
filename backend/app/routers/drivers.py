@@ -2,6 +2,10 @@ from fastapi import APIRouter
 import json
 from settings.config import *
 import requests
+import asyncio
+import aiohttp
+from pydantic import BaseModel
+
 router = APIRouter()
 
 
@@ -136,3 +140,112 @@ def get_base_player_info(data: dict):
     #                     'permanentNumber': driver['permanentNumber']})
     # # print(drivers)
     # return drivers
+
+
+# @router.get("/driver_points")
+# def get_driver_points():
+#     return {
+#         "drivers": [
+#             {
+#                 "name": "Max Verstappen",
+#                 "points": [0, 12, 25, 38, 54, 64],
+#             },
+#             {
+#                 "name": "Sergio Perez",
+#                 "points": [0, 20, 29, 33, 42, 84],
+#             },
+#         ],
+#     }
+
+
+
+# @router.post("/driver_points")
+# def get_base_player_info(data: dict):
+#     year = data['year']
+#     drivers_url = f"http://ergast.com/api/f1/{year}/drivers.json"
+#     drivers_response = requests.get(drivers_url)
+#     drivers_data = drivers_response.json()
+#     drivers_list = drivers_data["MRData"]["DriverTable"]["Drivers"]
+
+#     drivers = []
+#     for driver in drivers_list:
+#         driver_id = driver["driverId"]
+#         driver_name = f"{driver['givenName']} {driver['familyName']}"
+#         results_url = f"http://ergast.com/api/f1/{year}/drivers/{driver_id}/results.json"
+#         results_response = requests.get(results_url)
+#         results_data = results_response.json()
+#         results_list = results_data["MRData"]["RaceTable"]["Races"]
+
+#         race_points = {"race0": 0}
+#         race_number = 1
+#         accumulated_points = 0
+#         for race in results_list:
+#             points = float(race["Results"][0]["points"])
+#             accumulated_points += points
+#             race_points[f"race{race_number}"] = accumulated_points
+#             race_number += 1
+
+#         drivers.append({
+#             "driver_name": driver_name,
+#             "race_points": race_points
+#         })
+
+#     race_labels = ['Season Start'] + [f'Race {i}' for i in range(1, race_number)]
+#     return {"year": year, "drivers": drivers, "race_labels": race_labels}
+cache = {}
+
+class Year(BaseModel):
+    year: int
+
+
+async def fetch_data(session, url):
+    async with session.get(url) as response:
+        return await response.json()
+
+
+async def get_driver_points_async(driver, year):
+    driver_id = driver["driverId"]
+    driver_name = f"{driver['givenName']} {driver['familyName']}"
+    async with aiohttp.ClientSession() as session:
+        results_url = f"http://ergast.com/api/f1/{year}/drivers/{driver_id}/results.json"
+        results_data = await fetch_data(session, results_url)
+        results_list = results_data["MRData"]["RaceTable"]["Races"]
+
+        race_points = {"race0": 0}
+        race_number = 1
+        accumulated_points = 0
+        for race in results_list:
+            points = float(race["Results"][0]["points"])
+            accumulated_points += points
+            race_points[f"race{race_number}"] = accumulated_points
+            race_number += 1
+
+        return {
+            "driver_name": driver_name,
+            "race_points": race_points
+        }
+
+
+@router.post("/driver_points")
+async def driver_points(year: Year):
+   # CACHE
+    if year.year in cache:
+        return cache[year.year]
+
+    drivers_url = f"http://ergast.com/api/f1/{year.year}/drivers.json"
+    drivers_response = requests.get(drivers_url)
+    drivers_data = drivers_response.json()
+    drivers_list = drivers_data["MRData"]["DriverTable"]["Drivers"]
+
+    drivers = await asyncio.gather(*[get_driver_points_async(driver, year.year) for driver in drivers_list])
+
+
+    max_races = max([len(driver["race_points"]) for driver in drivers])
+
+
+    race_labels = ['Season Start'] + [f'Race {i}' for i in range(1, max_races + 1)]
+    result = {"year": year.year, "drivers": drivers, "race_labels": race_labels}
+
+    # CACHE
+    cache[year.year] = result
+    return result

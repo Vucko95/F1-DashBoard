@@ -53,13 +53,7 @@
           {{ pastRace.country }} {{ pastRace.raceName }}</h3>
         <h3>Round {{ pastRace.round }} / 23 </h3>
         <h3> {{ pastRace.race_date }} </h3>
-          <!-- <button>Pick Timezone</button> -->
 
-          <!-- <p>Practice 2    FRI  {{ pastRace.startFP1 }}   </p> -->
-          <!-- <p>Practice 2    FRI    {{ pastRace.startFP2 }}     </p> -->
-          <!-- <p>Qualifing     SAT    {{ pastRace.startQualy }}    </p> -->
-          <!-- <p>Sprint        SAT    {{ pastRace.startSprint }}    </p> -->
-          <!-- <p>Race          SUN      {{ pastRace.startRace }}    </p> -->
               <h1>TOP DRIVERS </h1>
 
         <table >
@@ -159,10 +153,6 @@ import countryCodes from '../countryCodes.js';
         ...data,
         countryCode: countryCodes[data.country] || 'XX',
       };
-          // this.calculateTimeLeft();
-          console.log(this.pastRace)
-          console.log(this.pastRace)
-          console.log(this.pastRace)
         })
         .catch((error) => console.error(error));
     },
@@ -171,11 +161,6 @@ import countryCodes from '../countryCodes.js';
         .then((response) => response.json())
         .then((data) => {
           this.topDrivers = data;
-          // console.log(this.pastRace)
-
-          // this.calculateTimeLeft();
-          console.log(this.topDrivers)
-          console.log(this.topDrivers)
 
         })
         .catch((error) => console.error(error));

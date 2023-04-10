@@ -2,6 +2,7 @@
 import { RouterLink, RouterView } from 'vue-router'
 import LeftSidebar from '@/components/LeftSidebar.vue'
 import articles from '@/components/articles.vue'
+import chart from '@/components/chart.vue'
 import RightHome from '@/components/RightHome.vue'
 import ListDriverStandings from '@/components/standings/ListDriverStandings.vue'
 import ListConstructorsStandings from '@/components/standings/ListConstructorsStandings.vue'
@@ -19,7 +20,8 @@ import DriverPositionsPerCircuit from '@/components/driver/DriverPositionsPerCir
     <SelectYear />
     <div class="main-content">
       
-      <RightHome />
+      <!-- <RightHome /> -->
+      <chart />
       <articles />
       <ListDriversByYear />
       <ListDriverStandings />

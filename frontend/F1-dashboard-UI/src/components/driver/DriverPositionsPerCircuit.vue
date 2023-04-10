@@ -1,5 +1,10 @@
 <template>
-    <div  v-if="show" class="displayCircuitsByYear" id="style-1">
+  <div  v-if="show" class="displayCircuitsByYear" id="style-1">
+    <!-- <canvas id="myChart"></canvas> -->
+    <canvas id="bar-chart" width="2800" height="4250"></canvas>
+
+<!-- CHART HERE -->
+
 
         <table>
             <thead>
@@ -69,22 +74,41 @@
     
     <script>
     import countryCodes from '../countryCodes.js';
-
-import { EventBus } from '@/eventBus.js';
+    import { Chart  } from 'chart.js/auto';
+    import { EventBus } from '@/eventBus.js';
     export default {
       name: 'SelectYear',
 
       created() {
         EventBus.$on("toggle-Drivers-Components", () => {
-        this.show = !this.show;
-        // EventBus.$emit("select-year-toggled", this.show);
+    this.show = !this.show;
+    console.log("show:", this.show);
+    if (this.show) {
+      this.$nextTick(() => {
+        console.log("Creating chart");
+        this.createChart();
       });
+    }
+  });
 
         EventBus.$on('sendDriverId', ({ driverID, selectedYear }) => {
+          console.log("sendDriverId event received");
+
         this.getDriverCircuitResultsByYear(driverID, selectedYear);
 });
 
+// this.createChart();
+
+
+
+
+
+
+
+
+
     },
+
     data() {
     return {
       show: false,
@@ -97,13 +121,7 @@ import { EventBus } from '@/eventBus.js';
 
       methods: {
         getDriverCircuitResultsByYear(driverID,selectedYear) {
-    // const year = event.target.value;
-        // const year = 2023
-        // console.log('Right side')
-        //     console.log(selectedYear)
-        //     console.log(driverID)
-        //     console.log(driverID)
-        //     console.log(driverID)
+
 
     fetch('http://localhost:8888/circuits/driver', {
         method: 'POST',
@@ -131,7 +149,40 @@ import { EventBus } from '@/eventBus.js';
         .catch(error => console.error(error));
 
 
+    },
+    createChart() {
+
+
+
+
+
+
+    const ctx = document.getElementById('bar-chart').getContext('2d');
+    const chart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ["Africa", "Asia", "Europe", "Latin America", "North America"],
+      datasets: [
+        {
+          label: "Population (millions)",
+          backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850"],
+          data: [2478,5267,734,784,433]
+        }
+      ]
+    },
+    options: {
+      legend: { display: false },
+      title: {
+        display: true,
+        text: 'Predicted world population (millions) in 2050'
+      }
     }
+});
+  },
+
+
+
+
         }
         };
 

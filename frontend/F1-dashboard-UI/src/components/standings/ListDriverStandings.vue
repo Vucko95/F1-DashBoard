@@ -38,66 +38,48 @@
 .driversStandingsMainBox {
     margin: 5%;
     margin-top: 12.5%;
-    box-shadow: 0 0 3px rgba(78, 248, 234, 0.808);
-    border: 1px solid rgba(0, 0, 0, 0.514);
+    /* box-shadow: 0 0 3px rgba(78, 248, 234, 0.808); */
+    /* border: 1px solid rgba(0, 0, 0, 0.514); */
     transition: all 0.3s ease;
-    border-radius: 10px;
-    background: rgba(7, 1, 1, 0.589);
-    padding: 10px;
-    max-height: 50%;
-    overflow: auto;
-    width: 35%;
+    /* background: rgba(7, 1, 1, 0.589); */
+    /* background: rgb(8, 36, 13); */
+    
+    padding: 20px;
+    /* max-height: 50%;overflow: auto; */
+    /* width: 35%; */
     display: flex;
     flex-direction: column;
     align-items: center;
-
+    
+    background: rgb(27, 31, 36);
+    border-radius: 5%;
+    /* max-height: calc(100% - 30%); */
+    /* overflow: auto; */
 
 
     
 }
-.driversStandingsMainBox:hover {
+/* .driversStandingsMainBox:hover {
     box-shadow: 0 0 5px rgba(255, 0, 0, 0.562);
     border: 1px solid rgba(255, 0, 0, 0.726);
     
 
-}
+} */
 .driversStandingsMainBox  {
     font-size: 20px;
-    color: aliceblue;
-    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif
+    color: rgba(179, 199, 216, 0.747);
+    /* font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif */
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     /* color: white; */
 }
 
-.driversStandingsMainBox table {
+.driversStandingsMainBox table, th, td {
     text-align: center;
     
 }
-.driversStandingsMainBox table th, td {
-    padding-left: 35px;
-}
 
 
-#style-1::-webkit-scrollbar-track
-{
-	-webkit-box-shadow: inset 0 0 6px rgb(0, 0, 0);
-	border-radius: 15px;
-	background-color: #000000;
-}
 
-#style-1::-webkit-scrollbar
-{
-    border-radius: 15px;
-
-	width: 12px;
-	background-color: #030202;
-}
-
-#style-1::-webkit-scrollbar-thumb
-{
-	border-radius: 10px;
-	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
-	background-color:rgba(74, 80, 80, 0.411);
-}
 </style>
 
 <script>

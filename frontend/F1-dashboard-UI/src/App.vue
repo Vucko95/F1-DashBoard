@@ -19,7 +19,7 @@ import DriverPositionsPerCircuit from '@/components/driver/DriverPositionsPerCir
     <SelectYear />
     <div class="main-content">
       
-      <!-- <RightHome /> -->
+      <RightHome />
       <articles />
       <ListDriversByYear />
       <ListDriverStandings />
@@ -39,6 +39,8 @@ import DriverPositionsPerCircuit from '@/components/driver/DriverPositionsPerCir
 }
 
 .main-content {
+  background: rgb(15, 18, 20);
+  
   /* flex-grow: 1; */
    display: flex;
   width: 100%;

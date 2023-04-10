@@ -38,11 +38,11 @@
 .constructorStandingsMainBox {
     margin: 5%;
     margin-top: 12.5%;
-    box-shadow: 0 0 3px rgba(78, 248, 234, 0.808);
-    border: 1px solid rgba(0, 0, 0, 0.514);
+    /* box-shadow: 0 0 3px rgba(78, 248, 234, 0.808); */
+    /* border: 1px solid rgba(0, 0, 0, 0.514); */
     transition: all 0.3s ease;
-    border-radius: 10px;
-    background: rgba(7, 1, 1, 0.589);
+    /* border-radius: 10px; */
+    /* background: rgba(7, 1, 1, 0.589); */
     padding: 10px;
     max-height: 50%;
     overflow: auto;
@@ -51,16 +51,17 @@
     flex-direction: column;
     align-items: center;
 
-
+    background: rgb(27, 31, 36);
+    border-radius: 5%;
 
     
 }
-.constructorStandingsMainBox:hover {
+/* .constructorStandingsMainBox:hover {
     box-shadow: 0 0 5px rgba(255, 0, 0, 0.562);
     border: 1px solid rgba(255, 0, 0, 0.726);
     
 
-}
+} */
 .constructorStandingsMainBox  {
     font-size: 20px;
     color: aliceblue;

@@ -115,8 +115,8 @@ import { EventBus } from '@/eventBus.js';
         .then(response => response.json())
         .then(data => {
             this.circuitsList = data;
-
-            console.log('BEFORE')
+            console.log('THIS ONE')
+            // console.log('BEFORE')
             console.log(this.circuitsList)
             this.circuitsList = data.map(circuit => ({
             ...circuit,

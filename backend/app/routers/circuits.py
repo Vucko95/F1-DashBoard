@@ -2,6 +2,8 @@ from fastapi import APIRouter
 import json
 from settings.config import *
 import requests
+from datetime import datetime
+
 router = APIRouter()
 
 
@@ -172,3 +174,29 @@ def get_circuit_results(data: dict):
                 'points': points,
             })
     return results
+
+
+
+# @router.get("/ttt")
+
+# def get_next_race(year):
+#     # year = 2023
+#     url = f'http://ergast.com/api/f1/{year}.json'
+#     response = requests.get(url)
+#     data = response.json()
+#     races = data['MRData']['RaceTable']['Races']
+
+#     current_date = datetime.now().date()
+
+#     for race in races:
+#         race_date = datetime.strptime(race['date'], '%Y-%m-%d').date()
+#         if race_date >= current_date:
+#             return race
+
+#     return None
+
+# current_year = datetime.now().year
+# next_race = get_next_race(current_year)
+# print(next_race)
+
+

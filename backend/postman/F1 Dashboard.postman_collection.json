@@ -11,136 +11,639 @@
 			"item": [
 				{
 					"name": "Circuits",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"year\": 2021\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
+					"item": [
+						{
+							"name": "Circuits",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response is a list\", function () {\r",
+											"    let jsonData = pm.response.json()\r",
+											"    pm.expect(jsonData).to.be.an(\"array\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response item has correct keys\", function () {\r",
+											"    let jsonData = pm.response.json()\r",
+											"    pm.expect(jsonData).to.be.an(\"array\");\r",
+											"\r",
+											"    for(const item of jsonData) {\r",
+											"        pm.expect(item).to.have.keys('circuitId','circuitName','country').and.be.an(\"object\");\r",
+											"    }\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
 								}
-							}
-						},
-						"url": {
-							"raw": "/circuits",
-							"path": [
-								"circuits"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Circuit drivers",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"year\": 2021\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "/circuits?year=2021",
+									"path": [
+										"circuits"
+									],
+									"query": [
+										{
+											"key": "year",
+											"value": "2021"
+										}
+									]
 								}
-							}
+							},
+							"response": []
 						},
-						"url": {
-							"raw": "/circuits/driver",
-							"path": [
-								"circuits",
-								"driver"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Circuit results",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"year\": 2021,\r\n    \"circuit_id\": \"catalunya\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
+						{
+							"name": "Circuit results",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response is a list\", function () {\r",
+											"    let jsonData = pm.response.json()\r",
+											"    pm.expect(jsonData).to.be.an(\"array\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response item has correct keys\", function () {\r",
+											"    let jsonData = pm.response.json()\r",
+											"    pm.expect(jsonData).to.be.an(\"array\");\r",
+											"\r",
+											"    for(const item of jsonData) {\r",
+											"        pm.expect(item).to.have.keys('raceName','position','driverName', 'points', 'constructor').and.be.an(\"object\");\r",
+											"    }\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
 								}
-							}
-						},
-						"url": {
-							"raw": "/circuit_results",
-							"path": [
-								"circuit_results"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Circuit results by year",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"year\": 2021,\r\n    \"circuit_id\": \"catalunya\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "/circuits/:circuit_id?year=2021",
+									"path": [
+										"circuits",
+										":circuit_id"
+									],
+									"query": [
+										{
+											"key": "year",
+											"value": "2021"
+										}
+									],
+									"variable": [
+										{
+											"key": "circuit_id",
+											"value": "catalunya"
+										}
+									]
 								}
-							}
-						},
-						"url": {
-							"raw": "/circuits/track/result",
-							"path": [
-								"circuits",
-								"track",
-								"result"
-							]
+							},
+							"response": []
 						}
-					},
-					"response": []
+					]
 				},
 				{
 					"name": "Drivers",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"year\": 2021\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
+					"item": [
+						{
+							"name": "Drivers",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response is a list\", function () {\r",
+											"    let jsonData = pm.response.json()\r",
+											"    pm.expect(jsonData).to.be.an(\"array\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response item has correct keys\", function () {\r",
+											"    let jsonData = pm.response.json()\r",
+											"    pm.expect(jsonData).to.be.an(\"array\");\r",
+											"\r",
+											"    for(const item of jsonData) {\r",
+											"        pm.expect(item).to.have.keys('driverId','givenName','familyName', 'permanentNumber').and.be.an(\"object\");\r",
+											"    }\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
 								}
-							}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"year\": 2021\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "/drivers?year=2020",
+									"path": [
+										"drivers"
+									],
+									"query": [
+										{
+											"key": "year",
+											"value": "2020"
+										}
+									]
+								}
+							},
+							"response": []
 						},
-						"url": {
-							"raw": "/players",
-							"path": [
-								"players"
-							]
+						{
+							"name": "Driver results",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response is a list\", function () {\r",
+											"    let jsonData = pm.response.json()\r",
+											"    pm.expect(jsonData).to.be.an(\"array\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response item has correct keys\", function () {\r",
+											"    let jsonData = pm.response.json()\r",
+											"    pm.expect(jsonData).to.be.an(\"array\");\r",
+											"\r",
+											"    for(const item of jsonData) {\r",
+											"        pm.expect(item).to.have.keys('circuitId','position','raceName', 'country').and.be.an(\"object\");\r",
+											"    }\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "/drivers/:driver?year=2022",
+									"path": [
+										"drivers",
+										":driver"
+									],
+									"query": [
+										{
+											"key": "year",
+											"value": "2022"
+										}
+									],
+									"variable": [
+										{
+											"key": "driver",
+											"value": "albon"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Driver standings",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response is a list\", function () {\r",
+											"    let jsonData = pm.response.json()\r",
+											"    pm.expect(jsonData).to.be.an(\"array\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response item has correct keys\", function () {\r",
+											"    let jsonData = pm.response.json()\r",
+											"    pm.expect(jsonData).to.be.an(\"array\");\r",
+											"\r",
+											"    for(const item of jsonData) {\r",
+											"        pm.expect(item).to.have.keys('driverId','constructor_id','constructor', 'points', 'givenName', 'familyName', 'permanentNumber').and.be.an(\"object\");\r",
+											"    }\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "/driver-standings",
+									"path": [
+										"driver-standings"
+									],
+									"query": [
+										{
+											"key": "year",
+											"value": "2021",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Constructor standings",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response is a list\", function () {\r",
+											"    let jsonData = pm.response.json()\r",
+											"    pm.expect(jsonData).to.be.an(\"array\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response item has correct keys\", function () {\r",
+											"    let jsonData = pm.response.json()\r",
+											"    pm.expect(jsonData).to.be.an(\"array\");\r",
+											"\r",
+											"    for(const item of jsonData) {\r",
+											"        pm.expect(item).to.have.keys('position','constructor_id','name', 'points').and.be.an(\"object\");\r",
+											"    }\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"year\": 2021\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "/year/constructorstandings",
+									"path": [
+										"year",
+										"constructorstandings"
+									],
+									"query": [
+										{
+											"key": "year",
+											"value": "2021",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Constructor standings Copy",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response is a object\", function () {\r",
+											"    let jsonData = pm.response.json()\r",
+											"    pm.expect(jsonData).to.be.an(\"object\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response item has correct keys\", function () {\r",
+											"    pm.expect(pm.response.json()).to.have.keys('year','drivers','race_labels').and.be.an(\"object\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"year\": 2021\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "/driver_points",
+									"path": [
+										"driver_points"
+									],
+									"query": [
+										{
+											"key": "year",
+											"value": "2021",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
+					]
+				},
+				{
+					"name": "Races",
+					"item": [
+						{
+							"name": "Current race",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response is a object\", function () {\r",
+											"    let jsonData = pm.response.json()\r",
+											"    pm.expect(jsonData).to.be.an(\"object\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response has correct keys\", function () {\r",
+											"    pm.expect(pm.response.json()).to.have.keys(\r",
+											"        'season',\r",
+											"        'round',\r",
+											"        'country',\r",
+											"        'url',\r",
+											"        'raceName',\r",
+											"        'circuitId',\r",
+											"        'first_practice_date',\r",
+											"        'race_date',\r",
+											"        'date',\r",
+											"        'time',\r",
+											"        'startFP1',\r",
+											"        'startFP2',\r",
+											"        'startQualy',\r",
+											"        'startSprint',\r",
+											"        'startRace',\r",
+											"    ).and.be.an(\"object\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "/next-race",
+									"path": [
+										"next-race"
+									],
+									"query": [
+										{
+											"key": "year",
+											"value": "2021",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Past race",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response is a object\", function () {\r",
+											"    let jsonData = pm.response.json()\r",
+											"    pm.expect(jsonData).to.be.an(\"object\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response has correct keys\", function () {\r",
+											"    pm.expect(pm.response.json()).to.have.keys(\r",
+											"        'season',\r",
+											"        'round',\r",
+											"        'country',\r",
+											"        'url',\r",
+											"        'raceName',\r",
+											"        'circuitId',\r",
+											"        'first_practice_date',\r",
+											"        'race_date',\r",
+											"        'date',\r",
+											"        'time',\r",
+											"        'startFP1',\r",
+											"        'startFP2',\r",
+											"        'startQualy',\r",
+											"        'startSprint',\r",
+											"        'startRace',\r",
+											"    ).and.be.an(\"object\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "/past-race",
+									"path": [
+										"past-race"
+									],
+									"query": [
+										{
+											"key": "year",
+											"value": "2021",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Top drivers",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response is a list\", function () {\r",
+											"    let jsonData = pm.response.json()\r",
+											"    pm.expect(jsonData).to.be.an(\"array\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response item has correct keys\", function () {\r",
+											"    let jsonData = pm.response.json()\r",
+											"    pm.expect(jsonData).to.be.an(\"array\");\r",
+											"\r",
+											"    for(const item of jsonData) {\r",
+											"        pm.expect(item).to.have.keys('driver_name','driver_surname','driver_time', 'driver_points').and.be.an(\"object\");\r",
+											"    }\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "/top-drivers?year=2020",
+									"path": [
+										"top-drivers"
+									],
+									"query": [
+										{
+											"key": "year",
+											"value": "2020"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
 				}
 			],
 			"event": [

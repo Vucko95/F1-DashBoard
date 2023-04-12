@@ -109,7 +109,7 @@ import countryCodes from '../countryCodes.js';
     this.fetchNextRace();
     this.fetchPastRace();
     this.fetchTopDrivers();
-    // this.timer = setInterval(this.calculateTimeLeft, 1000);
+    this.timer = setInterval(this.calculateTimeLeft, 1000);
 
   },
   methods: {
@@ -157,7 +157,7 @@ import countryCodes from '../countryCodes.js';
         .catch((error) => console.error(error));
     },
     fetchTopDrivers() {
-      fetch("http://localhost:8888/topdrivers")
+      fetch("http://localhost:8888/race/last/top3")
         .then((response) => response.json())
         .then((data) => {
           this.topDrivers = data;

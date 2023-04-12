@@ -102,7 +102,7 @@ async def last_race(db: Session = Depends(get_database_session)):
         print(f"An error occurred while processing the request: {str(e)}")
         return {"error": "An error occurred while processing the request"}
 
-@router.get("/topdrivers")
+@router.get("/race/last/top3")
 async def get_top_drivers(db: Session = Depends(get_database_session)):
     try:
         year = datetime.now().year

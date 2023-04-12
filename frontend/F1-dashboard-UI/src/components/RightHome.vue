@@ -1,5 +1,6 @@
 <template>
-    <div class="mainDashboardBox">
+    <div v-if="show" class="mainDashboardBox">
+    <!-- <div  class="mainDashboardBox"> -->
 
         <div class="homeBox">
 
@@ -101,15 +102,23 @@ import countryCodes from '../countryCodes.js';
       countryCode: '',
     },
     pastRace : [],
-    topDrivers: []
+    topDrivers: [],
+    show: false,
 
     };
   },
   created() {
-    this.fetchNextRace();
-    this.fetchPastRace();
-    this.fetchTopDrivers();
-    this.timer = setInterval(this.calculateTimeLeft, 1000);
+
+    EventBus.$on("toggle-Home", () => {
+            // EventBus.$emit("select-year-toggled", this.show);
+            this.show = !this.show;
+            // console.log(this.show)   
+            this.fetchNextRace();
+            this.fetchPastRace();
+            this.fetchTopDrivers();
+            this.timer = setInterval(this.calculateTimeLeft, 1000);
+      });
+
 
   },
   methods: {

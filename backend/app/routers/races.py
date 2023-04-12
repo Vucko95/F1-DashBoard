@@ -2,129 +2,125 @@ from fastapi import APIRouter
 from settings.config import *
 import requests
 from datetime import datetime
+from sqlalchemy.orm import Session
+from models.models import *
+from fastapi import Depends
+from datetime import datetime
+from sqlalchemy import and_, desc
+from settings.db import get_database_session
+from sqlalchemy.orm import joinedload
 
 router = APIRouter()
 
-def get_last_race(races):
-    last_race = None
-    for race in races:
-        if not last_race or race["date"] < last_race["date"]:
-            last_race = race
-    return last_race
 
 
-@router.get("/next-race")
-async def next_race():
-    current_race_url = "https://ergast.com/api/f1/current.json"
+
+def fetch_next_race_from_db(db: Session):
+    try:
+        current_date = datetime.now().date()
+        next_race_query = db.query(Race).filter(Race.date > current_date).order_by(Race.date).first()
+        # next_race_query = db.query(Race).options(joinedload(Race.circuit)).filter(Race.date > current_date).order_by(Race.date).first()
+        return next_race_query
+    except Exception as e:
+        print(f"An error occurred while querying the database: {str(e)}")
+        return None
     
-    response = requests.get(current_race_url).json()
-
-    races = response["MRData"]["RaceTable"]["Races"]
-
-    current_date = datetime.now().date()
-    next_race_data = None
-
-    for race in races:
-        race_date = datetime.strptime(race["date"], "%Y-%m-%d").date()
-        if race_date > current_date:
-            next_race_data = race
-            break
-
-    if not next_race_data:
-        return {"error": "No more races this season"}
-
-    next_race = {
-        "season": next_race_data["season"],
-        "round": next_race_data["round"],
-        "country": races[0]["Circuit"]["Location"]['country'],
-        "url": next_race_data["url"],
-        "raceName": next_race_data["raceName"],
-        "circuitId": next_race_data["Circuit"]["circuitId"],
-        "first_practice_date": next_race_data['FirstPractice']['date'],
-        "race_date": next_race_data["date"],
-        "date": next_race_data["date"],
-        "time": next_race_data.get("time"),
-
-        # START TIMES
-        "startFP1": next_race_data['FirstPractice']['time'],
-        "startFP2": next_race_data['SecondPractice']['time'],
-        "startQualy": next_race_data['Qualifying']['time'],
-        "startSprint": next_race_data['Sprint']['time'],
-        "startRace": next_race_data['time'],
-    }
-
-    return next_race
 
 
+@router.get("/race/next")
+async def next_race(db: Session = Depends(get_database_session)):
+    try:
+        next_race_data = fetch_next_race_from_db(db)
+
+        if not next_race_data:
+            return {"error": "No more races this season"}
+
+        next_race = {
+            "season": next_race_data.year,
+            "round": next_race_data.round,
+            # PROBLEM 
+            # "country": next_race_data.Circuit.country,
+            "url": next_race_data.url,
+            "raceName": next_race_data.name,
+            "circuitId": next_race_data.circuitId,
+            "first_practice_date": next_race_data.fp1_date,
+            "race_date": next_race_data.date,
+            "date": next_race_data.date,
+            "time": next_race_data.time,
+            "startFP1": next_race_data.fp1_time,
+            "startFP2": next_race_data.fp2_time,
+            "startQualy": next_race_data.quali_time,
+            "startSprint": next_race_data.sprint_time,
+            "startRace": next_race_data.time,
+        }
+
+        return next_race
+    except Exception as e:
+        print(f"An error occurred while processing the request: {str(e)}")
+        return {"error": "An error occurred while processing the request"}
+    
+
+def fetch_last_race_from_db(db: Session):
+    try:
+        current_date = datetime.now().date()
+        last_race_query = db.query(Race).filter(Race.date < current_date).order_by(desc(Race.date)).first()
+        return last_race_query
+    except Exception as e:
+        print(f"An error occurred while querying the database: {str(e)}")
+        return None
 
 
-@router.get("/past-race")
-async def previous_race():
-    response = requests.get("https://ergast.com/api/f1/current.json")
-    data = response.json()
-    races = data["MRData"]["RaceTable"]["Races"]
+@router.get("/race/last")
+async def last_race(db: Session = Depends(get_database_session)):
+    try:
+        last_race_data = fetch_last_race_from_db(db)
 
-    current_date = datetime.now().date()
-    previous_race_data = None
+        if not last_race_data:
+            return {"error": "No more races this season"}
 
-    for race in reversed(races):
-        race_date = datetime.strptime(race["date"], "%Y-%m-%d").date()
-        if race_date < current_date:
-            previous_race_data = race
-            break
+        last_race = {
+            "season": last_race_data.year,
+            "round": last_race_data.round,
+            # PROBLEM 
+            # "country": last_race_data.Circuit.country,
+            "url": last_race_data.url,
+            "raceName": last_race_data.name,
+            "circuitId": last_race_data.circuitId,
+            "first_practice_date": last_race_data.fp1_date,
+            "race_date": last_race_data.date,
+            "date": last_race_data.date,
+            "time": last_race_data.time,
+            "startFP1": last_race_data.fp1_time,
+            "startFP2": last_race_data.fp2_time,
+            "startQualy": last_race_data.quali_time,
+            "startSprint": last_race_data.sprint_time,
+            "startRace": last_race_data.time,
+        }
 
-    if not previous_race_data:
-        return {"error": "No previous races this season"}
-    previous_race = {
-        "season": previous_race_data["season"],
-        "round": previous_race_data["round"],
-        "country": previous_race_data["Circuit"]["Location"]['country'],
-        "url": previous_race_data["url"],
-        "raceName": previous_race_data["raceName"],
-        "circuitId": previous_race_data["Circuit"]["circuitId"],
-        "first_practice_date": previous_race_data['FirstPractice']['date'],
-        "race_date": previous_race_data["date"],
-        "date": previous_race_data["date"],
-        "time": previous_race_data.get("time"),
-        # START TIMES
-        "startFP1": previous_race_data['FirstPractice']['time'],
-        "startFP2": previous_race_data['SecondPractice']['time'],
-        "startQualy": previous_race_data['Qualifying']['time'],
-        # MOST RACES DONT HAVE SPRINT
-        "startSprint": previous_race_data.get('Sprint', {}).get('time', None),
-        "startRace": previous_race_data['time'],
-    }
+        return last_race
+    except Exception as e:
+        print(f"An error occurred while processing the request: {str(e)}")
+        return {"error": "An error occurred while processing the request"}
 
-    return previous_race
-
-
-@router.get("/top-drivers")
-async def get_top_drivers(year: str = None):
-    if not year:
+@router.get("/topdrivers")
+async def get_top_drivers(db: Session = Depends(get_database_session)):
+    try:
         year = datetime.now().year
+        current_date = datetime.now().date()
+        last_race_query = db.query(Race).filter(and_(Race.year==year, Race.date < current_date)).order_by(desc(Race.date)).first()
+        results_query = db.query(Result).filter(and_(Result.raceId==last_race_query.raceId, Result.statusId==1)).order_by(Result.points.desc()).limit(3)
         
-    top_drivers_url = f"https://ergast.com/api/f1/{year}/last/results.json"
+        top_three_drivers = []
+        for result in results_query:
+            driver_query = db.query(Driver).filter_by(driverId=result.driverId).first()
+            top_three_drivers.append({
+                'driver_name' : driver_query.forename,
+                'driver_surname' : driver_query.surname,
+                'driver_time': result.time,
+                'driver_points' : result.points,
+            })
+        return top_three_drivers
+    except Exception as e:
+        print(f"An error occurred while processing the request: {str(e)}")
+        return {"error": "An error occurred while processing the request"}
 
-    top_drivers = requests.get(top_drivers_url).json()
-
-    previous_race_data = top_drivers["MRData"]["RaceTable"]["Races"][0]
-
-    round_number = previous_race_data["round"]
-
-    results_response = requests.get(f"http://ergast.com/api/f1/{year}/{round_number}/results.json")
-
-    results_data = results_response.json()["MRData"]["RaceTable"]["Races"][0]["Results"]
-
-    top_drivers = []
-    for result in results_data:
-        top_drivers.append({
-            'driver_name' : result['Driver']['givenName'],
-            'driver_surname' : result['Driver']['familyName'],
-            # SOME DRIVERS DONT HAVE TIME
-            'driver_time': result.get('Time', {}).get('time', None),
-            'driver_points' : result['points'],
-        })
-
-    top_three_drivers = top_drivers[:3]
-
-    return top_three_drivers

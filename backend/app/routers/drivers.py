@@ -2,33 +2,105 @@ from datetime import datetime
 from fastapi import APIRouter
 from pydantic import BaseModel
 from settings.config import *
-import aiohttp
+# import aiohttp
 import asyncio
 import requests
-
+from sqlalchemy.orm import Session
+from settings.db import Session
+from models.models import *
+from fastapi import Depends
 router = APIRouter()
 
 
-@router.get("/drivers")
-def get_best_players(year: str = None):
-    if not year:
-        year = datetime.now().year
+# def get_drivers_from_db(year: int, db: Session):
+#     return db.query(Driver).filter(Driver.year == year).all()
 
-    drivers_url = f"https://ergast.com/api/f1/{year}/drivers.json"
-    response = requests.get(url = drivers_url).json()
+# def get_driver_standings_from_db(year: int, db: Session):
+#     return db.query(DriverStanding, Driver).filter(DriverStanding.year == year).join(Driver, Driver.driverId == DriverStanding.driverId).all()
 
-    list_of_drivers = response['MRData']['DriverTable']['Drivers']
+# def get_driver_standings_from_db(year: int, db: Session):
+#     return db.query(DriverStanding, Driver, Constructor).filter(DriverStanding.year == year).join(Driver, Driver.driverId == DriverStanding.driverId).join(Constructor, Constructor.constructorId == DriverStanding.constructorId).all()
 
-    drivers = []
-    for driver in list_of_drivers:
-        drivers.append({
-            'driverId' : driver['driverId'],
-            'givenName' : driver['givenName'],
-            'familyName' : driver['familyName'],
-            'permanentNumber' : driver['permanentNumber'] 
-        })
 
-    return drivers
+
+# class DriverStandingsRequest(BaseModel):
+#     year: int
+
+# @router.get("/drivers")
+# def get_best_players(year: str = None, db: Session = Depends(Session)):
+#     if not year:
+#         year = datetime.now().year
+
+#     drivers = get_drivers_from_db(year, db)
+
+#     drivers_list = []
+#     for driver in drivers:
+#         drivers_list.append({
+#             'driverId': driver.driverId,
+#             'givenName': driver.givenName,
+#             'familyName': driver.familyName,
+#             'permanentNumber': driver.permanentNumber
+#         })
+
+#     return drivers_list
+
+# @router.post("/year/driverstandings")
+# def get_base_player_info(data: DriverStandingsRequest, db: Session = Depends(Session)):
+#     print("Request received:", data)
+
+#     year = data.year
+
+#     driver_standings = get_driver_standings_from_db(year, db)
+
+#     drivers_list = []
+#     for driver_standing, driver, constructor in driver_standings:
+#         drivers_list.append({
+#             'driverId': driver.driverId,
+#             'givenName': driver.givenName,
+#             'familyName': driver.familyName,
+#             'permanentNumber': driver.permanentNumber,
+#             'constructor_id': constructor.constructorId,
+#             'constructor': constructor.name,
+#             'points': driver_standing.points
+#         })
+
+#     return drivers_list
+
+
+
+# @router.post("/year/driverstandings")
+# def get_base_player_info(data: dict):
+#     year = data['year']
+#     f1_base_url  = 'https://ergast.com/api/f1/'
+#     f1_drivers_by_year = f'{f1_base_url}{year}/drivers.json'
+#     response = requests.get(url = f1_drivers_by_year)
+#     f1_drivers_by_year_json = response.json()
+#     list_of_drivers = f1_drivers_by_year_json['MRData']['DriverTable']['Drivers']
+#     drivers = []
+#     for driver in list_of_drivers:
+#         drivers.append({'driverId' : driver['driverId'],'givenName' : driver['givenName'],'familyName' : driver['familyName'],'permanentNumber' : driver['permanentNumber'], })
+#     return drivers
+
+# @router.get("/drivers")
+# def get_best_players(year: str = None):
+#     if not year:
+#         year = datetime.now().year
+
+#     drivers_url = f"https://ergast.com/api/f1/{year}/drivers.json"
+#     response = requests.get(url = drivers_url).json()
+
+#     list_of_drivers = response['MRData']['DriverTable']['Drivers']
+
+#     drivers = []
+#     for driver in list_of_drivers:
+#         drivers.append({
+#             'driverId' : driver['driverId'],
+#             'givenName' : driver['givenName'],
+#             'familyName' : driver['familyName'],
+#             'permanentNumber' : driver['permanentNumber'] 
+#         })
+
+#     return drivers
 
 
 @router.get("/drivers/{driver_id}")
@@ -249,17 +321,3 @@ def get_best_players():
     # return drivers
 
 # https://ergast.com/api/f1/2018/driverStandings
-# @router.post("/year/driverstandings")
-# def get_base_player_info(data: dict):
-#     year = data['year']
-#     f1_base_url  = 'https://ergast.com/api/f1/'
-#     f1_drivers_by_year = f'{f1_base_url}{year}/drivers.json'
-#     response = requests.get(url = f1_drivers_by_year)
-#     f1_drivers_by_year_json = response.json()
-#     list_of_drivers = f1_drivers_by_year_json['MRData']['DriverTable']['Drivers']
-#     # print(f1_drivers_by_year_json)
-#     drivers = []
-#     for driver in list_of_drivers:
-#         drivers.append({'driverId' : driver['driverId'],'givenName' : driver['givenName'],'familyName' : driver['familyName'],'permanentNumber' : driver['permanentNumber'], })
-#     # print(drivers)
-#     return drivers

@@ -20,7 +20,7 @@ import DriverPositionsPerCircuit from '@/components/driver/DriverPositionsPerCir
     <SelectYear />
     <div class="main-content">
       
-      <!-- <RightHome /> -->
+      <RightHome />
       <!-- <chart /> -->
       <articles />
       <ListDriversByYear />

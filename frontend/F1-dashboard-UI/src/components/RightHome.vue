@@ -114,7 +114,7 @@ import countryCodes from '../countryCodes.js';
   },
   methods: {
     fetchNextRace() {
-      fetch("http://localhost:8888/next_race")
+      fetch("http://localhost:8888/race/next")
         .then((response) => response.json())
         .then((data) => {
           this.nextRace = data;
@@ -144,7 +144,7 @@ import countryCodes from '../countryCodes.js';
 
 
     fetchPastRace() {
-      fetch("http://localhost:8888/pastrace")
+      fetch("http://localhost:8888/race/last")
         .then((response) => response.json())
         .then((data) => {
           this.pastRace = data;

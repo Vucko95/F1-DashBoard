@@ -14,10 +14,10 @@
         <th></th>
       </thead>
       <tbody>
-        <tr v-for="driver in driverStandings" :key="driver.driverId">
+        <tr v-for="driver in driverStandings" :key="driver.driver_id">
           <!-- <td>{{ driver.driverId }}</td> -->
-          <td>{{ driver.givenName }}</td>
-          <td>{{ driver.familyName }}</td>
+          <td>{{ driver.driver_name }}</td>
+          <!-- <td>{{ driver.familyName }}</td> -->
           <td>
 
           </td>
@@ -26,7 +26,7 @@
             {{ driver.constructor }}</td>
             
             <!-- <td>{{ driver.constructor_id }}</td> -->
-            <td>{{ driver.points }}</td>
+            <td>{{ driver.total_points }}</td>
         </tr>
       </tbody>
     </table>
@@ -88,17 +88,18 @@ import { EventBus } from '@/eventBus.js';
 export default {
   name: 'ListDriverStandings',
   methods: {
-  fetchDriverstandings(year) {
+  fetchDriverstandings() {
 
     fetch('http://localhost:8888/year/driverstandings', {
-      method: 'POST',
+      method: 'GET',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ "year": year })
+      // body: JSON.stringify({ "year": year })
     })
       .then(response => response.json())
       .then(data => {
+        console.log(data)
         this.driverStandings = data;
         this.loading = false;
 
@@ -128,10 +129,10 @@ created() {
   EventBus.$on("toggle-Standings-Components", () => {
         this.show = !this.show;
         EventBus.$emit("select-year-toggled", this.show);
+        this.fetchDriverstandings(2023);
       });
 
 
-    this.fetchDriverstandings(2023);
 
     
 

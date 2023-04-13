@@ -15,17 +15,17 @@
         <!-- <th>Team</th> -->
       </thead>
       <tbody>
-        <tr v-for="team in constructorStandings" :key="team.constructorId">
+        <tr v-for="team in constructorStandings" :key="team.constructor_id">
           <!-- <td>{{ driver.driverId }}</td> -->
           <td>{{ team.position }}
           </td>
-          <img :src="'/teamlogos/' + team.constructor_id + '.webp'" class="team-logo"/>
+          <img :src="'/teamlogos/' + team.constructor_ref + '.webp'" class="team-logo"/>
           <td>
-            {{ team.name }}
+            {{ team.constructor_name }}
   
             <!-- {{ team.constructor_id }} -->
           </td>
-          <td>{{ team.points }}</td>
+          <td>{{ team.total_points }}</td>
           <!-- <td>{{ driver.constructor }}</td> -->
         </tr>
       </tbody>
@@ -117,21 +117,21 @@ import { EventBus } from '@/eventBus.js';
 export default {
   name: 'ListConstructorsStandings',
   methods: {
-  fetchConstructorstandings(year) {
+  // fetchConstructorstandings(year) {
+  fetchConstructorstandings() {
 
     fetch('http://localhost:8888/year/constructorstandings', {
-      method: 'POST',
+      method: 'GET',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ "year": year })
+      // body: JSON.stringify({ "year": year })
     })
       .then(response => response.json())
       .then(data => {
         this.constructorStandings = data;
         this.loading = false;
 
-        // console.log(data)
       })
       .catch(error => console.error(error));
   }
@@ -156,8 +156,8 @@ created() {
   EventBus.$on("toggle-Standings-Components", () => {
         this.show = !this.show;
         EventBus.$emit("select-year-toggled", this.show);
+        this.fetchConstructorstandings();
       });
-    this.fetchConstructorstandings(2023);
 
     
 

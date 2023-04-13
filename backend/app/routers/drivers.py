@@ -1,6 +1,7 @@
 from datetime import datetime
 from fastapi import APIRouter
 from pydantic import BaseModel
+from sqlalchemy import desc, func
 from settings.config import *
 # import aiohttp
 import asyncio
@@ -9,14 +10,16 @@ from sqlalchemy.orm import Session
 from settings.db import Session
 from models.models import *
 from fastapi import Depends
+from settings.db import get_database_session
+
 router = APIRouter()
 
 
 # def get_drivers_from_db(year: int, db: Session):
 #     return db.query(Driver).filter(Driver.year == year).all()
 
-# def get_driver_standings_from_db(year: int, db: Session):
-#     return db.query(DriverStanding, Driver).filter(DriverStanding.year == year).join(Driver, Driver.driverId == DriverStanding.driverId).all()
+def get_driver_standings_from_db(year: int, db: Session):
+    return db.query(DriverStanding, Driver).filter(DriverStanding.year == year).join(Driver, Driver.driverId == DriverStanding.driverId).all()
 
 # def get_driver_standings_from_db(year: int, db: Session):
 #     return db.query(DriverStanding, Driver, Constructor).filter(DriverStanding.year == year).join(Driver, Driver.driverId == DriverStanding.driverId).join(Constructor, Constructor.constructorId == DriverStanding.constructorId).all()
@@ -25,6 +28,84 @@ router = APIRouter()
 
 # class DriverStandingsRequest(BaseModel):
 #     year: int
+
+
+
+
+@router.get("/year/driverstandings")
+async def driver_standings(db: Session = Depends(get_database_session)):
+    try:
+        year = datetime.now().year
+        results_query = (
+            db.query(Driver, func.sum(DriverStanding.points).label("total_points"), Constructor.constructorRef)
+            .join(DriverStanding, Driver.driverId == DriverStanding.driverId)
+            .join(Race, DriverStanding.raceId == Race.raceId)
+            .join(Constructor, Constructor.constructorId == DriverStanding.constructorId)
+            .filter(Race.year == year)
+            .group_by(Driver.driverId, Constructor.constructorRef)
+            .order_by(desc("total_points"))
+            .all()
+        )
+
+        driver_standings = []
+        for driver, total_points, constructor_ref in results_query:
+            driver_standings.append(
+                {
+                    "driver_id": driver.driverId,
+                    "driver_ref": driver.driverRef,
+                    "driver_name": f"{driver.forename} {driver.surname}",
+                    "nationality": driver.nationality,
+                    "total_points": total_points,
+                    "constructor_ref": constructor_ref
+                }
+            )
+
+        return driver_standings
+    except Exception as e:
+        print(f"An error occurred while processing the request: {str(e)}")
+        return {"error": "An error occurred while processing the request"}
+
+
+
+
+@router.get("/year/constructorstandings")
+async def constructor_standings(db: Session = Depends(get_database_session)):
+    try:
+        year = datetime.now().year
+        # results_query = (
+        #     db.query(Driver, func.sum(DriverStanding.points).label("total_points"))
+        #     .join(DriverStanding, Driver.driverId == DriverStanding.driverId)
+        #     .join(Race, DriverStanding.raceId == Race.raceId)
+        #     .filter(Race.year == year)
+        #     .group_by(Driver.driverId)
+        #     .order_by(desc("total_points"))
+        #     .all()
+        # )
+        results_query = (
+            db.query(Constructor, func.sum(ConstructorStanding.points).label("total_points"))
+            .join(ConstructorStanding, Constructor.constructorId == ConstructorStanding.constructorId)
+            .join(Race, ConstructorStanding.raceId == Race.raceId)
+            .filter(Race.year == year)
+            .group_by(Constructor.constructorId)
+            .order_by(desc("total_points"))
+            .all()
+        )
+        constructor_standings = []
+        for constructor, total_points in results_query:
+            constructor_standings.append(
+                {
+                    "constructor_id": constructor.constructorId,
+                    "constructor_ref": constructor.constructorRef,
+                    "constructor_name": constructor.name,
+                    "total_points": total_points,
+                }
+            )
+
+        return constructor_standings
+    except Exception as e:
+        print(f"An error occurred while processing the request: {str(e)}")
+        return {"error": "An error occurred while processing the request"}
+
 
 # @router.get("/drivers")
 # def get_best_players(year: str = None, db: Session = Depends(Session)):
@@ -43,31 +124,6 @@ router = APIRouter()
 #         })
 
 #     return drivers_list
-
-# @router.post("/year/driverstandings")
-# def get_base_player_info(data: DriverStandingsRequest, db: Session = Depends(Session)):
-#     print("Request received:", data)
-
-#     year = data.year
-
-#     driver_standings = get_driver_standings_from_db(year, db)
-
-#     drivers_list = []
-#     for driver_standing, driver, constructor in driver_standings:
-#         drivers_list.append({
-#             'driverId': driver.driverId,
-#             'givenName': driver.givenName,
-#             'familyName': driver.familyName,
-#             'permanentNumber': driver.permanentNumber,
-#             'constructor_id': constructor.constructorId,
-#             'constructor': constructor.name,
-#             'points': driver_standing.points
-#         })
-
-#     return drivers_list
-
-
-
 # @router.post("/year/driverstandings")
 # def get_base_player_info(data: dict):
 #     year = data['year']
@@ -158,25 +214,24 @@ def get_base_player_info(year: str = None):
 
 
 
-@router.post("/year/constructorstandings")
-def get_base_player_info(data: dict):
-    year = data['year']
-    f1_drivers_by_year = f'{f1_base_url}{year}/constructorStandings.json'
-    response = requests.get(url = f1_drivers_by_year)
-    constructor_standings  = response.json()
-    constructor_standings = constructor_standings ['MRData']['StandingsTable']['StandingsLists'][0]['ConstructorStandings']
-    results = []
+# @router.post("/year/constructorstandings")
+# def get_base_player_info(data: dict):
+#     year = data['year']
+#     f1_drivers_by_year = f'{f1_base_url}{year}/constructorStandings.json'
+#     response = requests.get(url = f1_drivers_by_year)
+#     constructor_standings  = response.json()
+#     constructor_standings = constructor_standings ['MRData']['StandingsTable']['StandingsLists'][0]['ConstructorStandings']
+#     results = []
 
-    for constructor_standing in constructor_standings:
-        position = constructor_standing['position']
-        name = constructor_standing['Constructor']['name']
-        points = constructor_standing['points']
-        constructorId = constructor_standing['Constructor']['constructorId']
+#     for constructor_standing in constructor_standings:
+#         position = constructor_standing['position']
+#         name = constructor_standing['Constructor']['name']
+#         points = constructor_standing['points']
+#         constructorId = constructor_standing['Constructor']['constructorId']
 
-        results.append({'position': position, 'constructor_id': constructorId, 'name': name, 'points': points})
+#         results.append({'position': position, 'constructor_id': constructorId, 'name': name, 'points': points})
 
-    # print(results)
-    return results
+#     return results
 
         # constructor_info = driver['Constructors'][0]
         # constructor_info = driver_standing['Constructors']
